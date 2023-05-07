@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # Copyright 2023 FBK
 
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,35 +21,35 @@ from transformers import BertTokenizer
 
 
 class BertPreprocessor:
-    def __init__(self, model: str, max_seq_len: int = 32):
-        self.tokenizer = BertTokenizer.from_pretrained(model, do_lower_case=True)
+    """
+    The BertPreprocessor class is responsible for loading and preprocessing text data,
+    tailored specifically to be used with Bert models.
+    It builds on the BertTokenizer class provided by HuggingFace,
+    and leverages the pretrained model's tokenizer stored in the HuggingFace archive.
+    """
+    def __init__(self, model: str, max_seq_len: int = 32, lower_case=True):
+        self.tokenizer = BertTokenizer.from_pretrained(model, do_lower_case=lower_case)
         self.max_seq_len = max_seq_len
 
     def preprocessing(self, texts, labels):
         """
-        <class transformers.tokenization_utils_base.BatchEncoding> is used.
-        Returns:
+        <class transformers.tokenization_utils_base.BatchEncoding> is used to encode batches of text.
+        It returns:
           - token_id (Tensor)
           - attention_mask: Tensor of indices (0,1) specifying which tokens should considered by the model
           (return_attention_mask = True)
           - labels (Tensor)
         """
-        token_ids = []
-        attention_masks = []
-        for sent in texts:
-            encoding_dict = self.tokenizer.encode_plus(
-                sent,
-                add_special_tokens=True,
-                max_length=self.max_seq_len,
-                pad_to_max_length=True,
-                return_attention_mask=True,
-                return_tensors='pt')
-            token_ids.append(encoding_dict['input_ids'])
-            attention_masks.append(encoding_dict['attention_mask'])
-        token_ids = torch.cat(token_ids, dim=0)
-        attention_masks = torch.cat(attention_masks, dim=0)
+        encoding_dict = self.tokenizer.batch_encode_plus(
+            texts,
+            add_special_tokens=True,
+            max_length=self.max_seq_len,
+            pad_to_max_length=True,
+            return_attention_mask=True,
+            return_tensors='pt')
+        token_ids = encoding_dict['input_ids']
+        attention_masks = encoding_dict['attention_mask']
         labels = torch.tensor(labels)
-
         return token_ids, attention_masks, labels
 
 

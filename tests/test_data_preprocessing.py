@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # Copyright 2023 FBK
 
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,7 +20,7 @@ from src.data_preprocessing import BertPreprocessor
 
 
 class TestBertPreprocessor(unittest.TestCase):
-    def setUp(self) -> None:
+    def setUp(self):
         self.text = [
             "Questa è la prima frase, più lunga di ventiquattro tokens, quindi dovrebbe essere troncata",
             "Questa è la seconda frase, rientra nei limiti",
@@ -33,9 +32,9 @@ class TestBertPreprocessor(unittest.TestCase):
     def test_preprocessing(self):
         token_ids, attention_masks, labels = self.bert_preprocessor.preprocessing(self.text, self.labels)
 
-        self.assertEqual(type(token_ids), Tensor)
-        self.assertEqual(type(attention_masks), Tensor)
-        self.assertEqual(type(labels), Tensor)
+        self.assertIsInstance(token_ids, Tensor)
+        self.assertIsInstance(attention_masks, Tensor)
+        self.assertIsInstance(labels, Tensor)
 
         self.assertEqual(token_ids.size(), torch.Size([4, 24]))
         self.assertEqual(attention_masks.size(), torch.Size([4, 24]))
