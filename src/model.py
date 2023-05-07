@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # Copyright 2023 FBK
 
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,6 +17,12 @@ from transformers import BertForSequenceClassification
 
 
 class BertForSequenceClassificationModel(torch.nn.Module):
+    """
+    BertForSequenceClassificationModel consists of a classifier model composed of a pretrained Bert-based
+    encoder and a feed-forward layer.
+    The pretrained model can be either a model from the HuggingFace archive or a checkpoint of Bert-based model built
+    with HuggingFace.
+    """
     def __init__(self, model, num_labels, output_attentions=False, output_hidden_states=False):
         super(BertForSequenceClassificationModel, self).__init__()
         self.model = BertForSequenceClassification.from_pretrained(
