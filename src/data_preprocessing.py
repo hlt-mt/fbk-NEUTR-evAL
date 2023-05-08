@@ -20,6 +20,17 @@ from torch.utils.data import DataLoader, TensorDataset, RandomSampler
 from transformers import BertTokenizer
 
 
+def load_data(tsv_file: str) -> Tuple[List[str], List[int]]:
+    sentences = []
+    labels = []
+    with open(tsv_file, "r") as t_f:
+        tsv_reader = csv.DictReader(t_f, delimiter='\t')
+        for line in tsv_reader:
+            sentences.append(line['SENTENCE'])
+            labels.append(int(line['LABEL']))
+    return sentences, labels
+
+
 class BertPreprocessor:
     """
     The BertPreprocessor class is responsible for loading and preprocessing text data,
@@ -27,7 +38,7 @@ class BertPreprocessor:
     It builds on the BertTokenizer class provided by HuggingFace,
     and leverages the pretrained model's tokenizer stored in the HuggingFace archive.
     """
-    def __init__(self, model: str, max_seq_len: int = 32, lower_case=True):
+    def __init__(self, model: str, max_seq_len: int = 32, lower_case=False):
         self.tokenizer = BertTokenizer.from_pretrained(model, do_lower_case=lower_case)
         self.max_seq_len = max_seq_len
 
@@ -51,17 +62,6 @@ class BertPreprocessor:
         attention_masks = encoding_dict['attention_mask']
         labels = torch.tensor(labels)
         return token_ids, attention_masks, labels
-
-
-def load_data(tsv_file: str) -> Tuple[List[str], List[int]]:
-    sentences = []
-    labels = []
-    with open(tsv_file, "r") as t_f:
-        tsv_reader = csv.DictReader(t_f, delimiter='\t')
-        for line in tsv_reader:
-            sentences.append(line['SENTENCE'])
-            labels.append(int(line['LABEL']))
-    return sentences, labels
 
 
 def data_preparation(tsv_file: str, model: str, batch_size=16) -> DataLoader:
