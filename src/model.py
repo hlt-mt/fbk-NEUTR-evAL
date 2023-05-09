@@ -11,8 +11,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License
-import torch
+from typing import Tuple
 
+import torch
+from torch import tensor
 from transformers import BertForSequenceClassification
 
 
@@ -33,9 +35,11 @@ class BertForSequenceClassificationModel(torch.nn.Module):
         device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         self.model.to(device)
 
-    def forward(self, input_ids, attention_mask, labels):
-        return self.model(
+    def forward(self, input_ids, attention_mask, labels) -> Tuple[tensor, tensor]:
+        preds = self.model(
             input_ids,
             token_type_ids=None,
             attention_mask=attention_mask,
             labels=labels)
+        probabilites = torch.softmax(preds.logits, dim=1)
+        return preds.loss, probabilites

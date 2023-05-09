@@ -43,13 +43,13 @@ class TestBertPreprocessor(unittest.TestCase):
 
     # Verifying whether forward works correctly (checking dimension of outputs)
     def test_forward(self):
-        preds = self.model.forward(self.token_ids, self.attention_masks, self.labels)
-        self.assertEqual(torch.Size([]), preds.loss.size())
-        self.assertEqual(torch.Size([4, 3]), preds.logits.size())
+        loss, probabilities = self.model.forward(self.token_ids, self.attention_masks, self.labels)
+        self.assertEqual(torch.Size([]), loss.size())
+        self.assertEqual(torch.Size([4, 3]), probabilities.size())
 
     # Verifying whether forward gives the same outputs for same sentences in different batches
     def test_forward_consistency(self):
-        preds = self.model.forward(self.token_ids, self.attention_masks, self.labels)
+        loss, probabilities = self.model.forward(self.token_ids, self.attention_masks, self.labels)
 
         # New data
         new_order = [2, 3, 0, 1]
@@ -57,13 +57,21 @@ class TestBertPreprocessor(unittest.TestCase):
         new_attention_masks = self.attention_masks[new_order]
         new_labels = self.labels[new_order]
 
-        new_preds = self.model.forward(new_token_ids, new_attention_masks, new_labels)
+        new_loss, new_probabilities = self.model.forward(new_token_ids, new_attention_masks, new_labels)
 
-        self.assertTrue(torch.equal(new_preds.logits[0], preds.logits[2]))
-        self.assertTrue(torch.equal(new_preds.logits[1], preds.logits[3]))
-        self.assertTrue(torch.equal(new_preds.logits[2], preds.logits[0]))
-        self.assertTrue(torch.equal(new_preds.logits[3], preds.logits[1]))
-        self.assertEqual(new_preds.loss, preds.loss)
+        self.assertTrue(torch.equal(new_probabilities[0], probabilities[2]))
+        self.assertTrue(torch.equal(new_probabilities[1], probabilities[3]))
+        self.assertTrue(torch.equal(new_probabilities[2], probabilities[0]))
+        self.assertTrue(torch.equal(new_probabilities[3], probabilities[1]))
+        self.assertTrue(torch.equal(new_loss, loss))
+
+    # Verifying that the sum of the probabilities always returns 1.
+    def test_probabilities(self):
+        _, probabilities = self.model.forward(self.token_ids, self.attention_masks, self.labels)
+        print(torch.sum(probabilities, dim=1).detach())
+        self.assertTrue(torch.equal(
+            torch.tensor([1.0000, 1.0000, 1.0000, 1.0000]),
+            torch.sum(probabilities, dim=1).detach()))
 
 
 if __name__ == '__main__':
