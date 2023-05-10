@@ -26,11 +26,18 @@ class TestBertPreprocessor(unittest.TestCase):
             "Questa è la seconda frase, rientra nei limiti",
             "Questa è la terza frase, avrà padding",
             "Questa è la quarta frase."]
-        self.labels = [0, 0, 1, 1]
         self.bert_preprocessor = BertPreprocessor("bert-base-uncased", max_seq_len=24)
 
+    # Verifying that in case that labels are not available, the labels tensor is not returned
+    def test_no_labels(self):
+        preprocessing_tuple = self.bert_preprocessor._preprocessing(self.text)
+        self.assertEqual(2, len(preprocessing_tuple))
+
+    # Verifying that _preprocessing() function returns the expected tensors
     def test_preprocessing(self):
-        token_ids, attention_masks, labels = self.bert_preprocessor.preprocessing(self.text, self.labels)
+        labels = [0, 0, 1, 1]
+
+        token_ids, attention_masks, labels = self.bert_preprocessor._preprocessing(self.text, labels)
 
         self.assertIsInstance(token_ids, Tensor)
         self.assertIsInstance(attention_masks, Tensor)

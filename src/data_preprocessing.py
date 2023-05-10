@@ -13,10 +13,10 @@
 # limitations under the License
 import csv
 from pathlib import Path
-from typing import Tuple, List, Union
+from typing import Tuple, List
 
 import torch
-from torch.utils.data import DataLoader, TensorDataset, RandomSampler
+from torch.utils.data import DataLoader, TensorDataset
 
 from transformers import BertTokenizer
 
@@ -47,15 +47,15 @@ class BertPreprocessor:
     It builds on the BertTokenizer class provided by HuggingFace,
     and leverages the pretrained model's tokenizer stored in the HuggingFace archive.
     """
-    def __init__(self, model: str, max_seq_len: int = 32, lower_case=False):
+    def __init__(self, model: str, max_seq_len: int = 128, lower_case=False):
         self.tokenizer = BertTokenizer.from_pretrained(model, do_lower_case=lower_case)
         self.max_seq_len = max_seq_len
 
-    def preprocessing(self, texts, labels=None):
+    def _preprocessing(self, texts: List, labels: List = None):
         """
         <class transformers.tokenization_utils_base.BatchEncoding> is used to encode batches of text.
         It returns:
-          - token_id (Tensor)
+          - token_ids (Tensor): the tokens representing the text
           - attention_mask: Tensor of indices (0,1) specifying which tokens should considered by the model
           (return_attention_mask = True)
           - labels (Tensor)
@@ -70,21 +70,13 @@ class BertPreprocessor:
         token_ids = encoding_dict['input_ids']
         attention_masks = encoding_dict['attention_mask']
         if labels:
-            return token_ids, attention_masks
-        else:
             labels = torch.tensor(labels)
             return token_ids, attention_masks, labels
+        else:
+            return token_ids, attention_masks
 
-
-def prepare_data(tsv_file: Path, model: str, shuffle=True, batch_size=16) -> DataLoader:
-    """Prepares data in batches and returns a dataloader object."""
-    sentences, labels = load_data(tsv_file)
-    preprocessor = BertPreprocessor(model)
-    if labels:
-        token_ids, attention_masks, labels = preprocessor.preprocessing(sentences, labels)
-        data_set = TensorDataset(token_ids, attention_masks, labels)
-    else:
-        token_ids, attention_masks = preprocessor.preprocessing(sentences)
-        data_set = TensorDataset(token_ids, attention_masks)
-    sampler = RandomSampler(data_set) if shuffle else None
-    return DataLoader(data_set, sampler=sampler, batch_size=batch_size)
+    def prepare_data(self, tsv_file: Path, shuffle=True, batch_size=16) -> DataLoader:
+        """Prepares data in batches and returns a dataloader object."""
+        sentences, labels = load_data(tsv_file)
+        data_set = TensorDataset(*self._preprocessing(sentences, labels))
+        return DataLoader(data_set, shuffle=shuffle, batch_size=batch_size)

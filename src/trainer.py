@@ -80,7 +80,7 @@ class BertTrainer:
                     num_batches += 1
             val_loss /= num_batches
 
-            log.info(f"\nEpoch {epoch + 1}, Training loss: {train_loss:.3f}, Validation loss: {val_loss:.3f}")
+            log.info(f"Epoch {epoch + 1}, Training loss: {train_loss:.3f}, Validation loss: {val_loss:.3f}")
 
             save_path = os.path.join(self.save_path, f"checkpoint_{epoch + 1}")
             log.info(f"Saving checkpoint_{epoch + 1}")

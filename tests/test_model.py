@@ -63,15 +63,16 @@ class TestBertPreprocessor(unittest.TestCase):
         self.assertTrue(torch.equal(new_probabilities[1], probabilities[3]))
         self.assertTrue(torch.equal(new_probabilities[2], probabilities[0]))
         self.assertTrue(torch.equal(new_probabilities[3], probabilities[1]))
-        self.assertTrue(torch.equal(new_loss, loss))
+        self.assertAlmostEqual(new_loss.item(), loss.item(), delta=0.00001)
 
     # Verifying that the sum of the probabilities always returns 1.
     def test_probabilities(self):
         _, probabilities = self.model.forward(self.token_ids, self.attention_masks, self.labels)
         print(torch.sum(probabilities, dim=1).detach())
-        self.assertTrue(torch.equal(
-            torch.tensor([1.0000, 1.0000, 1.0000, 1.0000]),
-            torch.sum(probabilities, dim=1).detach()))
+        self.assertTrue(np.allclose(
+            np.array([1.0, 1.0, 1.0, 1.0]),
+            np.sum(probabilities.detach().numpy(), axis=1),
+            atol=0.00001))
 
 
 if __name__ == '__main__':

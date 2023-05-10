@@ -16,14 +16,14 @@ import argparse
 import os
 from pathlib import Path
 
-from src.data_preprocessing import prepare_data
+from src.data_preprocessing import BertPreprocessor
 from src.model import BertForSequenceClassificationModel
 from src.trainer import BertTrainer
 
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--model", required=True, type=str, help="Name or path of the model to fine-tuned.")
+    parser.add_argument("--model", required=True, type=str, help="Name or path of the Bert-based model to fine-tuned.")
     parser.add_argument("--num-classes", required=True, type=str, help="Number of classes in the classification task.")
     parser.add_argument("--data-root", required=True, type=str)
     parser.add_argument("--train", required=True, type=str)
@@ -31,18 +31,22 @@ def main():
     parser.add_argument("--save-dir", required=True, type=str)
     parser.add_argument("--num-epochs", required=True, type=int)
     parser.add_argument("--batch-size", required=False, type=int, default=16)
+    parser.add_argument("--max-seq-len", required=False, type=int, default=128)
+    parser.add_argument("--lower-case", required=False, type=bool, default=False)
+    parser.add_argument("--shuffle", required=False, type=bool, default=True)
     parser.add_argument("--learning-rate", required=False, type=float, default=5e-5)
     parser.add_argument("--epsilon", required=False, type=float, default=1e-08)
     args = parser.parse_args()
 
-    train_dataloader = prepare_data(
-        Path(os.path.join(args.data_root, args.train)),
-        args.model,
-        args.batch_size)
-    validation_dataloader = prepare_data(
-        Path(os.path.join(args.data_root, args.validation)),
-        args.model,
-        args.batch_size)
+    preprocessor = BertPreprocessor(args.model, args.max_seq_len, args.lower_case)
+    train_dataloader = preprocessor.prepare_data(
+        tsv_file=Path(os.path.join(args.data_root, args.train)),
+        shuffle=args.shuffle,
+        batch_size=args.batch_size)
+    validation_dataloader = preprocessor.prepare_data(
+        tsv_file=Path(os.path.join(args.data_root, args.validation)),
+        shuffle=args.shuffle,
+        batch_size=args.batch_size)
     model = BertForSequenceClassificationModel(args.model, args.num_classes)
     trainer = BertTrainer(
         model,

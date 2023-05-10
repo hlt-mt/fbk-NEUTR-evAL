@@ -19,7 +19,7 @@ from pathlib import Path
 from sklearn.metrics import classification_report
 from torch import tensor
 
-from src.data_preprocessing import load_data, prepare_data
+from src.data_preprocessing import load_data, BertPreprocessor
 from src.generator import BertGenerator
 
 
@@ -55,11 +55,16 @@ def main():
     parser.add_argument("--checkpoint", required=True, type=str, help="Path of the fine-tuned model.")
     parser.add_argument("--num-classes", required=True, type=str, help="Number of classes for the classification task.")
     parser.add_argument("--batch-size", required=False, type=int, default=16)
-    parser.add_argument("--evaluation", required=False, type=bool, default=False)
+    parser.add_argument("--max-seq-len", required=False, type=int, default=128)
+    parser.add_argument("--lower-case", required=False, type=bool, default=False)
+    parser.add_argument("--evaluation", required=False, type=bool, default=True)
 
     args = parser.parse_args()
-
-    dataloader = prepare_data(args.data_file, args.model, shuffle=False)
+    preprocessor = BertPreprocessor(args.model, args.max_seq_len, args.lower_case)
+    dataloader = preprocessor.prepare_data(
+        tsv_file=args.data_file,
+        shuffle=False,
+        batch_size=args.batch_size)
     generator = BertGenerator(args.checkpoint, args.num_classes, dataloader)
     outputs = generator.generate()
     save_output(args.data_file, args.save_file, outputs)
@@ -82,7 +87,6 @@ def main():
                 f"PRECISION: {report[label]['precision']}\t"
                 f"RECALL: {report[label]['recall']}\t"
                 f"F1: {report[label]['f1']}")
-
 
 
 if __name__ == "__main__":
