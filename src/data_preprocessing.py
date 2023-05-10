@@ -12,7 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License
 import csv
-from typing import Tuple, List
+from pathlib import Path
+from typing import Tuple, List, Union
 
 import torch
 from torch.utils.data import DataLoader, TensorDataset, RandomSampler
@@ -20,14 +21,22 @@ from torch.utils.data import DataLoader, TensorDataset, RandomSampler
 from transformers import BertTokenizer
 
 
-def load_data(tsv_file: str) -> Tuple[List[str], List[int]]:
+def load_data(tsv_file: Path) -> Tuple[List[str], List[int]]:
+    """
+    Loads the tsv file containing the sentences in the "SENTENCE" column
+    (and the labels if available, in the "LABEL" column).
+    It returns two lists, one for sentences, one for labels.
+    If labels are not avaiblae, the second list is empty
+    """
     sentences = []
     labels = []
     with open(tsv_file, "r") as t_f:
         tsv_reader = csv.DictReader(t_f, delimiter='\t')
+        has_labels = 'LABEL' in tsv_reader.fieldnames
         for line in tsv_reader:
             sentences.append(line['SENTENCE'])
-            labels.append(int(line['LABEL']))
+            if has_labels:
+                labels.append(int(line['LABEL']))
     return sentences, labels
 
 
@@ -42,7 +51,7 @@ class BertPreprocessor:
         self.tokenizer = BertTokenizer.from_pretrained(model, do_lower_case=lower_case)
         self.max_seq_len = max_seq_len
 
-    def preprocessing(self, texts, labels):
+    def preprocessing(self, texts, labels=None):
         """
         <class transformers.tokenization_utils_base.BatchEncoding> is used to encode batches of text.
         It returns:
@@ -60,13 +69,22 @@ class BertPreprocessor:
             return_tensors='pt')
         token_ids = encoding_dict['input_ids']
         attention_masks = encoding_dict['attention_mask']
-        labels = torch.tensor(labels)
-        return token_ids, attention_masks, labels
+        if labels:
+            return token_ids, attention_masks
+        else:
+            labels = torch.tensor(labels)
+            return token_ids, attention_masks, labels
 
 
-def data_preparation(tsv_file: str, model: str, batch_size=16) -> DataLoader:
+def prepare_data(tsv_file: Path, model: str, shuffle=True, batch_size=16) -> DataLoader:
+    """Prepares data in batches and returns a dataloader object."""
     sentences, labels = load_data(tsv_file)
     preprocessor = BertPreprocessor(model)
-    test_token_ids, test_attention_masks, test_labels = preprocessor.preprocessing(sentences, labels)
-    test_set = TensorDataset(test_token_ids, test_attention_masks, test_labels)
-    return DataLoader(test_set, sampler=RandomSampler(test_set), batch_size=batch_size)
+    if labels:
+        token_ids, attention_masks, labels = preprocessor.preprocessing(sentences, labels)
+        data_set = TensorDataset(token_ids, attention_masks, labels)
+    else:
+        token_ids, attention_masks = preprocessor.preprocessing(sentences)
+        data_set = TensorDataset(token_ids, attention_masks)
+    sampler = RandomSampler(data_set) if shuffle else None
+    return DataLoader(data_set, sampler=sampler, batch_size=batch_size)

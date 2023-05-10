@@ -11,7 +11,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License
-from typing import Tuple
+from pathlib import Path
+from typing import Tuple, Union
 
 import torch
 from torch import tensor
@@ -25,21 +26,33 @@ class BertForSequenceClassificationModel(torch.nn.Module):
     The pretrained model can be either a model from the HuggingFace archive or a checkpoint of Bert-based model built
     with HuggingFace.
     """
-    def __init__(self, model, num_labels, output_attentions=False, output_hidden_states=False):
+    def __init__(
+            self,
+            model: Union[str, Path],  # either path or HF name (e.g, "bert-base-uncased")
+            num_labels: int,
+            output_attentions: bool = False,
+            output_hidden_states: bool = False):
         super(BertForSequenceClassificationModel, self).__init__()
         self.model = BertForSequenceClassification.from_pretrained(
-            model,  # either path or HF name (e.g, "bert-base-uncased")
+            model,
             num_labels=num_labels,
             output_attentions=output_attentions,
             output_hidden_states=output_hidden_states)
         device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         self.model.to(device)
 
-    def forward(self, input_ids, attention_mask, labels) -> Tuple[tensor, tensor]:
+    def forward(self, input_ids, attention_mask, labels=None) -> Union[Tuple[tensor, tensor], tensor]:
         preds = self.model(
             input_ids,
             token_type_ids=None,
             attention_mask=attention_mask,
             labels=labels)
-        probabilites = torch.softmax(preds.logits, dim=1)
-        return preds.loss, probabilites
+        probabilities = torch.softmax(preds.logits, dim=1)
+        if labels is not None:
+            return preds.loss, probabilities
+        else:
+            return probabilities
+
+    def save_pretrained(self, save_path: Path):
+        # self.model.save_pretrained(save_path, output_file_name=f"checkpoint_{epoch}")
+        self.model.save_pretrained(save_path)
