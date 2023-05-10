@@ -18,7 +18,7 @@ import unittest
 import numpy as np
 import torch
 from torch import LongTensor
-from torch.utils.data import TensorDataset, DataLoader, RandomSampler
+from torch.utils.data import TensorDataset, DataLoader
 
 from src.model import BertForSequenceClassificationModel
 from src.trainer import BertTrainer
@@ -42,8 +42,14 @@ class TestBertTrainer(unittest.TestCase):
              [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
              [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]))
         self.train_labels = torch.LongTensor(np.array([0, 0, 1, 1]))
-        training_set = TensorDataset(self.train_token_ids, self.train_attention_masks, self.train_labels)
-        self.training_dataloader = DataLoader(training_set, sampler=RandomSampler(training_set), batch_size=2)
+        training_set = TensorDataset(
+            self.train_token_ids,
+            self.train_attention_masks,
+            self.train_labels)
+        self.training_dataloader = DataLoader(
+            training_set,
+            shuffle=True,
+            batch_size=2)
         # Validation Data
         self.val_token_ids = LongTensor(np.array(
              [[101, 8795, 2050, 1041, 2474, 28774, 4143, 25312, 3366, 1010, 20704, 2527, 11687,
@@ -54,8 +60,14 @@ class TestBertTrainer(unittest.TestCase):
             [[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
              [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]))
         self.val_labels = torch.LongTensor(np.array([1, 1]))
-        validation_set = TensorDataset(self.val_token_ids, self.val_attention_masks, self.val_labels)
-        self.validation_dataloader = DataLoader(validation_set, sampler=RandomSampler(validation_set), batch_size=2)
+        validation_set = TensorDataset(
+            self.val_token_ids,
+            self.val_attention_masks,
+            self.val_labels)
+        self.validation_dataloader = DataLoader(
+            validation_set,
+            shuffle=True,
+            batch_size=2)
 
         # Model
         self.model = BertForSequenceClassificationModel("bert-base-uncased", num_labels=2)
@@ -81,9 +93,13 @@ class TestBertTrainer(unittest.TestCase):
 
         original_model = BertForSequenceClassificationModel("bert-base-uncased", num_labels=2)
         state_dict_model = original_model.state_dict()
-        ft_model1 = BertForSequenceClassificationModel(os.path.join(self.save_path, "checkpoint_1"), num_labels=2)
+        ft_model1 = BertForSequenceClassificationModel(
+            os.path.join(self.save_path, "checkpoint_1"),
+            num_labels=2)
         state_dict_model1 = ft_model1.state_dict()
-        ft_model2 = BertForSequenceClassificationModel(os.path.join(self.save_path, "checkpoint_2"), num_labels=2)
+        ft_model2 = BertForSequenceClassificationModel(
+            os.path.join(self.save_path, "checkpoint_2"),
+            num_labels=2)
         state_dict_model2 = ft_model2.state_dict()
 
         self.assertFalse(torch.equal(

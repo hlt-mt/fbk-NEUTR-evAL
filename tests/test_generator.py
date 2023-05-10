@@ -43,12 +43,16 @@ class TestBertGenerator(unittest.TestCase):
              [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]))
         data_set = TensorDataset(self.token_ids, self.attention_masks)
         self.dataloader = DataLoader(data_set, batch_size=2)
-        self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')  # Training on gpu
+        # Training on gpu
+        self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
         # Generator
         root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         self.model_path = Path(os.path.join(root_dir, "tests", "checkpoint_1"))
-        self.generator = BertGenerator(self.model_path, num_labels=2, dataloader=self.dataloader)
+        self.generator = BertGenerator(
+            self.model_path,
+            num_labels=2,
+            dataloader=self.dataloader)
 
     # Verifying that in multiple inference on the same data, the results are consistent
     def test_model_updating(self):

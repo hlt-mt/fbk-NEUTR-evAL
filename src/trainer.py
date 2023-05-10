@@ -42,7 +42,8 @@ class BertTrainer:
             lr=lr,
             eps=eps)
         self.num_epochs = num_epochs
-        self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')  # Training on gpu
+        # Training on gpu
+        self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         self.save_path = save_path
 
     def train(self):
@@ -71,7 +72,10 @@ class BertTrainer:
             for batch in self.val_dataloader:
                 batch = tuple(t.to(self.device) for t in batch)
                 with torch.no_grad():
-                    inputs = {"input_ids": batch[0], "attention_mask": batch[1], "labels": batch[2]}
+                    inputs = {
+                        "input_ids": batch[0],
+                        "attention_mask": batch[1],
+                        "labels": batch[2]}
                     loss, probabilities = self.model(
                         inputs["input_ids"],
                         attention_mask=inputs["attention_mask"],
@@ -80,7 +84,10 @@ class BertTrainer:
                     num_batches += 1
             val_loss /= num_batches
 
-            log.info(f"Epoch {epoch + 1}, Training loss: {train_loss:.3f}, Validation loss: {val_loss:.3f}")
+            log.info(
+                f"Epoch {epoch + 1}, "
+                f"Training loss: {train_loss:.3f}, "
+                f"Validation loss: {val_loss:.3f}")
 
             save_path = os.path.join(self.save_path, f"checkpoint_{epoch + 1}")
             log.info(f"Saving checkpoint_{epoch + 1}")

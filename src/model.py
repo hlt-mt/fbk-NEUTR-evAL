@@ -21,10 +21,10 @@ from transformers import BertForSequenceClassification
 
 class BertForSequenceClassificationModel(torch.nn.Module):
     """
-    BertForSequenceClassificationModel consists of a classifier model composed of a pretrained Bert-based
-    encoder and a feed-forward layer.
-    The pretrained model can be either a model from the HuggingFace archive or a checkpoint of Bert-based model built
-    with HuggingFace.
+    BertForSequenceClassificationModel consists of a classifier model
+    composed of a pretrained Bert-based encoder and a feed-forward layer.
+    The pretrained model can be either a model from the HuggingFace archive
+    or a checkpoint of Bert-based model built with HuggingFace.
     """
     def __init__(
             self,
@@ -41,7 +41,11 @@ class BertForSequenceClassificationModel(torch.nn.Module):
         device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         self.model.to(device)
 
-    def forward(self, input_ids, attention_mask, labels=None) -> Union[Tuple[tensor, tensor], tensor]:
+    def forward(
+            self,
+            input_ids,
+            attention_mask,
+            labels=None) -> Union[Tuple[tensor, tensor], tensor]:
         preds = self.model(
             input_ids,
             token_type_ids=None,

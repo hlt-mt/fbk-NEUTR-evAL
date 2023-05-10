@@ -26,14 +26,19 @@ from src.generator import BertGenerator
 def save_output(data_file: Path, save_file: Path, outputs: tensor) -> None:
     """Saves outputs together with input sentences (and labels if available) in a tsv file"""
     sentences, labels = load_data(data_file)
-    assert len(sentences) == outputs.size()[0], "Number of sentences and of predicted classes does not match"
+    assert len(sentences) == outputs.size()[0], \
+        "Number of sentences and of predicted classes does not match"
     if labels:
         header = ["SENTENCE", "LABEL", "OUTPUT"]
         rows = [
-            {"SENTENCE": sentences[i], "LABEL": labels[i], "OUTPUT": outputs[i].item()} for i in range(len(sentences))]
+            {"SENTENCE": sentences[i],
+             "LABEL": labels[i],
+             "OUTPUT": outputs[i].item()} for i in range(len(sentences))]
     else:
         header = ["SENTENCE", "OUTPUT"]
-        rows = [{"SENTENCE": sentences[i], "OUTPUT": outputs[i].item()} for i in range(len(sentences))]
+        rows = [
+            {"SENTENCE": sentences[i],
+             "OUTPUT": outputs[i].item()} for i in range(len(sentences))]
     with open(save_file, "w") as t_f:
         writer = csv.DictWriter(t_f, fieldnames=header, delimiter="\t")
         writer.writerows(rows)
@@ -51,9 +56,21 @@ def main():
         required=True,
         type=Path,
         help="Path of the tsv file where outputs will be saved")
-    parser.add_argument("--model", required=True, type=str, help="Name of the Bert-based model.")
-    parser.add_argument("--checkpoint", required=True, type=str, help="Path of the fine-tuned model.")
-    parser.add_argument("--num-classes", required=True, type=str, help="Number of classes for the classification task.")
+    parser.add_argument(
+        "--model",
+        required=True,
+        type=str,
+        help="Name of the Bert-based model.")
+    parser.add_argument(
+        "--checkpoint",
+        required=True,
+        type=str,
+        help="Path of the fine-tuned model.")
+    parser.add_argument(
+        "--num-classes",
+        required=True,
+        type=str,
+        help="Number of classes for the classification task.")
     parser.add_argument("--batch-size", required=False, type=int, default=16)
     parser.add_argument("--max-seq-len", required=False, type=int, default=128)
     parser.add_argument("--lower-case", required=False, type=bool, default=False)
@@ -73,7 +90,8 @@ def main():
         _, labels = load_data(args.data_file)
         assert len(labels) > 0, "Evaluation is set, but labels are not available"
 
-        accuracy = sum([pred.item() != label for pred, label in zip(outputs, labels)]) / len(labels)
+        accuracy = sum(
+            [pred.item() != label for pred, label in zip(outputs, labels)]) / len(labels)
         print("OVERALL ACCURACY: ", accuracy)
 
         report = classification_report(

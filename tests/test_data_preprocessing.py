@@ -22,7 +22,8 @@ from src.data_preprocessing import BertPreprocessor
 class TestBertPreprocessor(unittest.TestCase):
     def setUp(self):
         self.text = [
-            "Questa è la prima frase, più lunga di ventiquattro tokens, quindi dovrebbe essere troncata",
+            "Questa è la prima frase, più lunga di ventiquattro tokens, "
+            "quindi dovrebbe essere troncata",
             "Questa è la seconda frase, rientra nei limiti",
             "Questa è la terza frase, avrà padding",
             "Questa è la quarta frase."]
@@ -37,7 +38,9 @@ class TestBertPreprocessor(unittest.TestCase):
     def test_preprocessing(self):
         labels = [0, 0, 1, 1]
 
-        token_ids, attention_masks, labels = self.bert_preprocessor._preprocessing(self.text, labels)
+        token_ids, attention_masks, labels = self.bert_preprocessor._preprocessing(
+            self.text,
+            labels)
 
         self.assertIsInstance(token_ids, Tensor)
         self.assertIsInstance(attention_masks, Tensor)

@@ -53,10 +53,12 @@ class BertPreprocessor:
 
     def _preprocessing(self, texts: List, labels: List = None):
         """
-        <class transformers.tokenization_utils_base.BatchEncoding> is used to encode batches of text.
+        <class transformers.tokenization_utils_base.BatchEncoding> is used
+        to encode batches of text.
         It returns:
           - token_ids (Tensor): the tokens representing the text
-          - attention_mask: Tensor of indices (0,1) specifying which tokens should considered by the model
+          - attention_mask: Tensor of indices (0,1) specifying which tokens
+          should considered by the model
           (return_attention_mask = True)
           - labels (Tensor)
         """

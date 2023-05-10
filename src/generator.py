@@ -24,7 +24,8 @@ class BertGenerator:
     def __init__(self, model: Path, num_labels: int, dataloader: DataLoader):
         self.model = BertForSequenceClassificationModel(model, num_labels=num_labels)
         self.dataloader = dataloader
-        self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')  # Training on gpu
+        # Training on gpu
+        self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     def generate(self):
         outputs = tensor([])
@@ -33,7 +34,9 @@ class BertGenerator:
             batch = tuple(t.to(self.device) for t in batch)
             with torch.no_grad():
                 inputs = {"input_ids": batch[0], "attention_mask": batch[1]}
-                probabilities = self.model.forward(inputs["input_ids"], inputs["attention_mask"])
+                probabilities = self.model.forward(
+                    inputs["input_ids"],
+                    inputs["attention_mask"])
                 predicted_label = torch.argmax(probabilities, dim=1)
                 predicted_labels = predicted_label.cpu().detach()
                 outputs = torch.cat((outputs, predicted_labels))

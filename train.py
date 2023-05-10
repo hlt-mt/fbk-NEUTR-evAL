@@ -23,8 +23,16 @@ from src.trainer import BertTrainer
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--model", required=True, type=str, help="Name or path of the Bert-based model to fine-tuned.")
-    parser.add_argument("--num-classes", required=True, type=str, help="Number of classes in the classification task.")
+    parser.add_argument(
+        "--model",
+        required=True,
+        type=str,
+        help="Name or path of the Bert-based model to fine-tuned.")
+    parser.add_argument(
+        "--num-classes",
+        required=True,
+        type=str,
+        help="Number of classes in the classification task.")
     parser.add_argument("--data-root", required=True, type=str)
     parser.add_argument("--train", required=True, type=str)
     parser.add_argument("--validation", required=True, type=str)
