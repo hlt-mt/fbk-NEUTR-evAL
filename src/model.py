@@ -58,5 +58,4 @@ class BertForSequenceClassificationModel(torch.nn.Module):
             return probabilities
 
     def save_pretrained(self, save_path: Path):
-        # self.model.save_pretrained(save_path, output_file_name=f"checkpoint_{epoch}")
         self.model.save_pretrained(save_path)
