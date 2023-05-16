@@ -54,6 +54,24 @@ class TestBertPreprocessor(unittest.TestCase):
             torch.all(attention_masks, dim=1),
             torch.tensor([True, False, False, False])))
 
+    def test_decode(self):
+        batch = [
+            torch.tensor(
+                [[101, 8795, 2050, 1041, 2474, 21111, 25312, 3366, 1010, 14255,
+                  2226, 11192, 2050, 4487, 18834, 18515, 6692, 4779, 3217, 19204,
+                  2015, 1010, 21864, 102],
+                 [101, 8795, 2050, 1041, 2474, 2117, 2050, 25312, 3366, 1010,
+                  15544, 4765, 2527, 11265, 2072, 5787, 2072, 102, 0, 0,
+                  0, 0, 0, 0]]),
+            torch.tensor(
+                [[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0]])]
+        testo = BertPreprocessor("bert-large-uncased").decode(batch[0])
+        self.assertListEqual(
+            ['questa e la prima frase, piu lunga di ventiquattro tokens, qui',
+             'questa e la seconda frase, rientra nei limiti'],
+            testo)
+
 
 if __name__ == '__main__':
     unittest.main()

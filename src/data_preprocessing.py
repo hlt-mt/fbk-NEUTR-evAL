@@ -20,6 +20,8 @@ from torch.utils.data import DataLoader, TensorDataset
 
 from transformers import BertTokenizer
 
+SPECIAL_TOKENS = ["[SEP]", "[PAD]", "[CLS]"]
+
 
 def load_data(tsv_file: Path) -> Tuple[List[str], List[int]]:
     """
@@ -77,7 +79,20 @@ class BertPreprocessor:
         else:
             return token_ids, attention_masks
 
-    def prepare_data(self, tsv_file: Path, shuffle=True, batch_size=16) -> DataLoader:
+    def decode(self, batch_token_ids):
+        sentences = []
+        for sent in batch_token_ids:
+            string_sentence = self.tokenizer.decode(sent)
+            for token in SPECIAL_TOKENS:
+                string_sentence = string_sentence.replace(token, "")
+            sentences.append(string_sentence.strip())
+        return sentences
+
+    def prepare_data(
+            self,
+            tsv_file: Path,
+            shuffle=True,
+            batch_size=16) -> DataLoader:
         """Prepares data in batches and returns a dataloader object."""
         sentences, labels = load_data(tsv_file)
         data_set = TensorDataset(*self._preprocessing(sentences, labels))
