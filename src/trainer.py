@@ -20,6 +20,8 @@ from tqdm import tqdm
 
 
 LOGGER = logging.getLogger(__name__)
+log_level = os.environ.get("LOG_LEVEL", "INFO")
+LOGGER.setLevel(getattr(logging, log_level))
 
 
 class BertTrainer:
