@@ -16,8 +16,7 @@ import logging
 import os
 
 import torch
-
-from tqdm import trange
+from tqdm import tqdm
 
 
 LOGGER = logging.getLogger(__name__)
@@ -47,11 +46,12 @@ class BertTrainer:
 
     def train(self):
         total_updates = 0
-        for epoch in trange(self.num_epochs, desc='Epoch'):
+        for epoch in range(self.num_epochs):
+            LOGGER.info(f"Starting Epoch {epoch}")
             self.model.train()
             train_loss = 0
             num_samples = 0
-            for batch in self.train_dataloader:
+            for batch in tqdm(self.train_dataloader):
                 batch = tuple(t.to(self.device) for t in batch)
                 inputs = {"input_ids": batch[0], "attention_mask": batch[1], "labels": batch[2]}
                 self.optimizer.zero_grad()
