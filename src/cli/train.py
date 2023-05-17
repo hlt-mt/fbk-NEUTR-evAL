@@ -31,7 +31,7 @@ def main():
     parser.add_argument(
         "--num-classes",
         required=True,
-        type=str,
+        type=int,
         help="Number of classes in the classification task.")
     parser.add_argument("--data-root", required=True, type=str)
     parser.add_argument("--train", required=True, type=str)
