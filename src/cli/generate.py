@@ -67,12 +67,12 @@ def main():
     parser.add_argument(
         "--checkpoint",
         required=True,
-        type=str,
+        type=Path,
         help="Path of the fine-tuned model.")
     parser.add_argument(
         "--num-classes",
         required=True,
-        type=str,
+        type=int,
         help="Number of classes for the classification task.")
     parser.add_argument("--batch-size", required=False, type=int, default=16)
     parser.add_argument("--max-seq-len", required=False, type=int, default=128)
