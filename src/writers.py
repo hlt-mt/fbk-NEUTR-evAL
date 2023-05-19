@@ -37,6 +37,7 @@ class FileWriter:
     def __enter__(self):
         assert self.fp is None
         self.fp = open(self.file_name, "w")
+        return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         if self.fp is not None:
@@ -58,4 +59,5 @@ class TSVWriter(FileWriter):
     def write_line(self, elements: Dict[str, str]) -> None:
         if self.writer is None:
             self.writer = csv.DictWriter(self.fp, fieldnames=elements.keys(), delimiter="\t")
+            self.writer.writeheader()
         self.writer.writerow(elements)

@@ -93,15 +93,12 @@ def main():
         shuffle=False,
         batch_size=args.batch_size)
     generator = BertGenerator(args.checkpoint, args.num_classes)
-    writer = None
-    if args.save_file is not None:
-        writer = REGISTERED_WRITERS[args.writer](args.save_file)
     metrics = [REGISTERED_METRICS[m] for m in getattr(args, "metrics", [])]
 
-    if writer is None:
+    if args.save_file is None:
         generate(generator, dataloader, preprocessor, metrics=metrics)
     else:
-        with writer as w:
+        with REGISTERED_WRITERS[args.writer](args.save_file) as w:
             generate(generator, dataloader, preprocessor, writer=w, metrics=metrics)
 
 
