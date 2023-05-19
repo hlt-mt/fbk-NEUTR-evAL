@@ -93,7 +93,7 @@ def main():
         shuffle=False,
         batch_size=args.batch_size)
     generator = BertGenerator(args.checkpoint, args.num_classes)
-    metrics = [REGISTERED_METRICS[m] for m in getattr(args, "metrics", [])]
+    metrics = [REGISTERED_METRICS[m]() for m in getattr(args, "metrics", [])]
 
     if args.save_file is None:
         generate(generator, dataloader, preprocessor, metrics=metrics)
