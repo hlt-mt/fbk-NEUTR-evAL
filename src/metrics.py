@@ -28,7 +28,7 @@ class Metric:
     """
     Base class to extend to implement metrics that can be reported in the generate.
     """
-    def add_element(self, prediction: int, label: int, pred_likelihood: float = None) -> None:
+    def add_element(self, prediction: int, label: int) -> None:
         ...
 
     @property
@@ -48,7 +48,7 @@ class AccuracyMetric(Metric):
         self.correct_count = 0
         self.wrong_count = 0
 
-    def add_element(self, prediction: int, label: int, pred_likelihood: float = None) -> None:
+    def add_element(self, prediction: int, label: int) -> None:
         if prediction == label:
             self.correct_count += 1
         else:
@@ -79,7 +79,7 @@ class ClassBasedF1Metric(Metric):
         if cls not in self.classes:
             self.classes[cls] = {"true_positives": 0, "false_positives": 0, "false_negatives": 0}
 
-    def add_element(self, prediction: int, label: int, pred_likelihood: float = None) -> None:
+    def add_element(self, prediction: int, label: int) -> None:
         self._ensure_class_present(prediction)
         if prediction == label:
             self.classes[prediction]["true_positives"] += 1

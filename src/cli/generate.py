@@ -49,7 +49,9 @@ def generate(
         for metric in metrics:
             assert labels is not None, "Labels are required to compute metrics"
             for pred, prob, label in zip(preds, probs, labels):
-                metric.add_element(pred, prob, label)
+                metric.add_element(pred, label)
+    for metric in metrics:
+        metric.pretty_print()
 
 
 def main():
