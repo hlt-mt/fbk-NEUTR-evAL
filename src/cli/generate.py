@@ -36,7 +36,8 @@ def generate(
         probs = output[1]
         labels = output[2] if len(output) > 2 else None
         if writer is not None:
-            sentences = preprocessor.decode(batch[0])
+            filtered_batch = [token for token in batch[0] if token not in ["<s>", "</s>", "<pad>"]]
+            sentences = preprocessor.decode(filtered_batch)
             if labels:
                 for sent, pred, prob, label in zip(sentences, preds, probs, labels):
                     writer.write_line({

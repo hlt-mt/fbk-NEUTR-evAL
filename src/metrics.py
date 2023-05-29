@@ -117,6 +117,6 @@ class ClassBasedF1Metric(Metric):
         result = self.overall_result
         for cls in sorted(result):
             metrics_string = [
-                f"{metric}: {result[cls][metric]:.2f}"
+                f"{metric}: {(result[cls][metric] * 100):.2f}"
                 for metric in ["f1-score", "precision", "recall"]]
             print(f"Class {cls}: {' ; '.join(metrics_string)}")
