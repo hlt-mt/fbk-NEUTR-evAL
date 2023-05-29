@@ -49,10 +49,10 @@ class BertTrainer:
 
     def train(self):
         LOGGER.info(f"Model architecture:\n{self.model}")
-        total_updates = 0
         for epoch in range(self.num_epochs):
             LOGGER.info(f"Starting Epoch {epoch + 1}")
             self.model.train()
+            total_updates = 0
             train_loss = 0
             num_samples = 0
             for batch in self.train_dataloader:
