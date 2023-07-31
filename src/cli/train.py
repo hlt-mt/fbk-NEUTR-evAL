@@ -16,8 +16,8 @@ import argparse
 import os
 from pathlib import Path
 
-from src.data_preprocessing import BertPreprocessor
-from src.model import BertForSequenceClassificationModel
+from src.data_preprocessing import Preprocessor
+from src.model import SequenceClassificationModel
 from src.trainer import BertTrainer
 
 
@@ -46,7 +46,7 @@ def main():
     parser.add_argument("--epsilon", required=False, type=float, default=1e-08)
     args = parser.parse_args()
 
-    preprocessor = BertPreprocessor(args.model, args.max_seq_len, args.lower_case)
+    preprocessor = Preprocessor(args.model, args.max_seq_len, args.lower_case)
     train_dataloader = preprocessor.prepare_data(
         tsv_file=Path(os.path.join(args.data_root, args.train)),
         shuffle=args.shuffle,
@@ -55,7 +55,7 @@ def main():
         tsv_file=Path(os.path.join(args.data_root, args.validation)),
         shuffle=args.shuffle,
         batch_size=args.batch_size)
-    model = BertForSequenceClassificationModel(args.model, args.num_classes)
+    model = SequenceClassificationModel(args.model, args.num_classes)
     trainer = BertTrainer(
         model,
         args.save_dir,

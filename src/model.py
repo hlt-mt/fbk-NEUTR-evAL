@@ -16,10 +16,10 @@ from typing import Tuple, Union
 
 import torch
 from torch import tensor
-from transformers import BertForSequenceClassification
+from transformers import AutoModelForSequenceClassification
 
 
-class BertForSequenceClassificationModel(torch.nn.Module):
+class SequenceClassificationModel(torch.nn.Module):
     """
     BertForSequenceClassificationModel consists of a classifier model
     composed of a pretrained Bert-based encoder and a feed-forward layer.
@@ -32,8 +32,8 @@ class BertForSequenceClassificationModel(torch.nn.Module):
             num_labels: int,
             output_attentions: bool = False,
             output_hidden_states: bool = False):
-        super(BertForSequenceClassificationModel, self).__init__()
-        self.model = BertForSequenceClassification.from_pretrained(
+        super(SequenceClassificationModel, self).__init__()
+        self.model = AutoModelForSequenceClassification.from_pretrained(
             model,
             num_labels=num_labels,
             output_attentions=output_attentions,

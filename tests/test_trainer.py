@@ -20,7 +20,7 @@ import torch
 from torch import LongTensor
 from torch.utils.data import TensorDataset, DataLoader
 
-from src.model import BertForSequenceClassificationModel
+from src.model import SequenceClassificationModel
 from src.trainer import BertTrainer
 
 
@@ -69,16 +69,27 @@ class TestBertTrainer(unittest.TestCase):
             shuffle=True,
             batch_size=2)
 
-        # Model
-        self.model = BertForSequenceClassificationModel("bert-base-uncased", num_labels=2)
+        # Loading models
+        self.model_bert = SequenceClassificationModel(
+            "bert-base-uncased",
+            num_labels=2)  # Bert Model
+        self.model_roberta = SequenceClassificationModel(
+            "osiria/roberta-base-italian",
+            num_labels=2)  # Roberta Model
 
         root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         self.save_path = os.path.join(root_dir, 'tests', "save_checkpoints")
         os.mkdir(self.save_path)
 
-        # Trainer
-        self.trainer = BertTrainer(
-            self.model,
+        # Trainer Initialization
+        self.trainer_bert = BertTrainer(
+            self.model_bert,
+            self.save_path,
+            self.training_dataloader,
+            self.validation_dataloader,
+            num_epochs=2)
+        self.trainer_roberta = BertTrainer(
+            self.model_roberta,
             self.save_path,
             self.training_dataloader,
             self.validation_dataloader,
@@ -88,16 +99,16 @@ class TestBertTrainer(unittest.TestCase):
         shutil.rmtree(self.save_path)
 
     # Verifying that during training weights are updated
-    def test_model_updating(self):
-        self.trainer.train()
+    def test_bert_updating(self):
+        self.trainer_bert.train()
 
-        original_model = BertForSequenceClassificationModel("bert-base-uncased", num_labels=2)
+        original_model = SequenceClassificationModel("bert-base-uncased", num_labels=2)
         state_dict_model = original_model.state_dict()
-        ft_model1 = BertForSequenceClassificationModel(
+        ft_model1 = SequenceClassificationModel(
             os.path.join(self.save_path, "checkpoint_1"),
             num_labels=2)
         state_dict_model1 = ft_model1.state_dict()
-        ft_model2 = BertForSequenceClassificationModel(
+        ft_model2 = SequenceClassificationModel(
             os.path.join(self.save_path, "checkpoint_2"),
             num_labels=2)
         state_dict_model2 = ft_model2.state_dict()
@@ -111,6 +122,30 @@ class TestBertTrainer(unittest.TestCase):
         self.assertFalse(torch.equal(
             state_dict_model1["model.bert.encoder.layer.0.output.dense.bias"],
             state_dict_model2["model.bert.encoder.layer.0.output.dense.bias"]))
+
+    def test_roberta_updating(self):
+        self.trainer_roberta.train()
+
+        original_model = SequenceClassificationModel("osiria/roberta-base-italian", num_labels=2)
+        state_dict_model = original_model.state_dict()
+        ft_model1 = SequenceClassificationModel(
+            os.path.join(self.save_path, "checkpoint_1"),
+            num_labels=2)
+        state_dict_model1 = ft_model1.state_dict()
+        ft_model2 = SequenceClassificationModel(
+            os.path.join(self.save_path, "checkpoint_2"),
+            num_labels=2)
+        state_dict_model2 = ft_model2.state_dict()
+
+        self.assertFalse(torch.equal(
+            state_dict_model["model.roberta.encoder.layer.0.output.dense.bias"],
+            state_dict_model1["model.roberta.encoder.layer.0.output.dense.bias"]))
+        self.assertFalse(torch.equal(
+            state_dict_model["model.roberta.encoder.layer.0.output.dense.bias"],
+            state_dict_model2["model.roberta.encoder.layer.0.output.dense.bias"]))
+        self.assertFalse(torch.equal(
+            state_dict_model1["model.roberta.encoder.layer.0.output.dense.bias"],
+            state_dict_model2["model.roberta.encoder.layer.0.output.dense.bias"]))
 
 
 if __name__ == '__main__':

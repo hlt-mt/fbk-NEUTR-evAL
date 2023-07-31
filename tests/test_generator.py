@@ -19,7 +19,7 @@ import torch
 from torch import LongTensor
 from torch.utils.data import TensorDataset, DataLoader
 
-from src.generator import BertGenerator
+from src.generator import Generator
 
 
 class TestBertGenerator(unittest.TestCase):
@@ -46,7 +46,7 @@ class TestBertGenerator(unittest.TestCase):
 
         # Create an instance of BertGenerator with a model hosted in HF,
         # not with a checkpoint's path as expected
-        self.generator = BertGenerator(
+        self.generator = Generator(
             "bert-base-uncased",
             num_labels=2)
 

@@ -18,7 +18,7 @@ from typing import Tuple, List
 import torch
 from torch.utils.data import DataLoader, TensorDataset
 
-from transformers import BertTokenizer
+from transformers import AutoTokenizer
 
 SPECIAL_TOKENS = ["[SEP]", "[PAD]", "[CLS]"]
 
@@ -42,7 +42,7 @@ def load_data(tsv_file: Path) -> Tuple[List[str], List[int]]:
     return sentences, labels
 
 
-class BertPreprocessor:
+class Preprocessor:
     """
     The BertPreprocessor class is responsible for loading and preprocessing text data,
     tailored specifically to be used with Bert models.
@@ -50,7 +50,7 @@ class BertPreprocessor:
     and leverages the pretrained model's tokenizer stored in the HuggingFace archive.
     """
     def __init__(self, model: str, max_seq_len: int = 128, lower_case=False):
-        self.tokenizer = BertTokenizer.from_pretrained(model, do_lower_case=lower_case)
+        self.tokenizer = AutoTokenizer.from_pretrained(model, do_lower_case=lower_case)
         self.max_seq_len = max_seq_len
 
     def _preprocessing(self, texts: List, labels: List = None):

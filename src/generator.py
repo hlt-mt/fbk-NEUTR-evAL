@@ -15,12 +15,12 @@ from pathlib import Path
 
 import torch
 
-from src.model import BertForSequenceClassificationModel
+from src.model import SequenceClassificationModel
 
 
-class BertGenerator:
+class Generator:
     def __init__(self, model: Path, num_labels: int):
-        self.model = BertForSequenceClassificationModel(model, num_labels=num_labels)
+        self.model = SequenceClassificationModel(model, num_labels=num_labels)
         # Training on gpu
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         self.model.to(self.device)

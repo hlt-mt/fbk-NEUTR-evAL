@@ -18,16 +18,16 @@ from typing import List
 
 from torch.utils.data import DataLoader
 
-from src.data_preprocessing import BertPreprocessor
-from src.generator import BertGenerator
+from src.data_preprocessing import Preprocessor
+from src.generator import Generator
 from src.metrics import REGISTERED_METRICS, Metric
 from src.writers import REGISTERED_WRITERS, FileWriter
 
 
 def generate(
-        generator: BertGenerator,
+        generator: Generator,
         dataloader: DataLoader,
-        preprocessor: BertPreprocessor,
+        preprocessor: Preprocessor,
         writer: FileWriter = None,
         metrics: List[Metric] = []) -> None:
     for batch in dataloader:
@@ -90,12 +90,12 @@ def main():
     parser.add_argument("--writer", choices=REGISTERED_WRITERS.keys(), default="tsv")
 
     args = parser.parse_args()
-    preprocessor = BertPreprocessor(args.model, args.max_seq_len, args.lower_case)
+    preprocessor = Preprocessor(args.model, args.max_seq_len, args.lower_case)
     dataloader = preprocessor.prepare_data(
         tsv_file=args.data_file,
         shuffle=False,
         batch_size=args.batch_size)
-    generator = BertGenerator(args.checkpoint, args.num_classes)
+    generator = Generator(args.checkpoint, args.num_classes)
     metrics = [REGISTERED_METRICS[m]() for m in getattr(args, "metrics", [])]
 
     if args.save_file is None:

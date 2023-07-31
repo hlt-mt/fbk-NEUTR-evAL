@@ -16,29 +16,50 @@ import unittest
 import torch
 from torch import Tensor
 
-from src.data_preprocessing import BertPreprocessor
+from src.data_preprocessing import Preprocessor
 
 
 class TestBertPreprocessor(unittest.TestCase):
     def setUp(self):
         self.text = [
             "Questa è la prima frase, più lunga di ventiquattro tokens, "
-            "quindi dovrebbe essere troncata",
+            "quindi ci si aspetta che sia troncata",
             "Questa è la seconda frase, rientra nei limiti",
             "Questa è la terza frase, avrà padding",
             "Questa è la quarta frase."]
-        self.bert_preprocessor = BertPreprocessor("bert-base-uncased", max_seq_len=24)
+        self.bert_preprocessor = Preprocessor("bert-base-uncased", max_seq_len=24)
+        self.roberta_preprocessor = Preprocessor("osiria/roberta-base-italian", max_seq_len=24)
 
-    # Verifying that in case that labels are not available, the labels tensor is not returned
+# Verifying that in case that labels are not available, the labels tensor is not returned
     def test_no_labels(self):
         preprocessing_tuple = self.bert_preprocessor._preprocessing(self.text)
         self.assertEqual(2, len(preprocessing_tuple))
 
-    # Verifying that _preprocessing() function returns the expected tensors
-    def test_preprocessing(self):
+    # Verifying that _preprocessing() function returns the expected tensors for Bert tokenizer
+    def test_bert_preprocessing(self):
         labels = [0, 0, 1, 1]
 
         token_ids, attention_masks, labels = self.bert_preprocessor._preprocessing(
+            self.text,
+            labels)
+
+        self.assertIsInstance(token_ids, Tensor)
+        self.assertIsInstance(attention_masks, Tensor)
+        self.assertIsInstance(labels, Tensor)
+
+        self.assertEqual(token_ids.size(), torch.Size([4, 24]))
+        self.assertEqual(attention_masks.size(), torch.Size([4, 24]))
+        self.assertEqual(labels.size(), torch.Size([4]))
+
+        self.assertTrue(torch.equal(
+            torch.all(attention_masks, dim=1),
+            torch.tensor([True, False, False, False])))
+
+    # Verifying that _preprocessing() function returns the expected tensors for Roberta tokenizer
+    def test_roberta_preprocessing(self):
+        labels = [0, 0, 1, 1]
+
+        token_ids, attention_masks, labels = self.roberta_preprocessor._preprocessing(
             self.text,
             labels)
 
@@ -66,7 +87,7 @@ class TestBertPreprocessor(unittest.TestCase):
             torch.tensor(
                 [[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
                  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0]])]
-        testo = BertPreprocessor("bert-large-uncased").decode(batch[0])
+        testo = Preprocessor("bert-large-uncased").decode(batch[0])
         self.assertListEqual(
             ['questa e la prima frase, piu lunga di ventiquattro tokens, qui',
              'questa e la seconda frase, rientra nei limiti'],

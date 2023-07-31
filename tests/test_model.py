@@ -17,7 +17,7 @@ import numpy as np
 import torch
 from torch import LongTensor
 
-from src.model import BertForSequenceClassificationModel
+from src.model import SequenceClassificationModel
 
 
 class TestBertPreprocessor(unittest.TestCase):
@@ -39,7 +39,7 @@ class TestBertPreprocessor(unittest.TestCase):
              [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]))
         self.labels = torch.LongTensor(np.array([0, 0, 1, 1]))
         # Model
-        self.model = BertForSequenceClassificationModel("bert-base-uncased", num_labels=3)
+        self.model = SequenceClassificationModel("bert-base-uncased", num_labels=3)
 
     # Verifying whether forward works correctly (checking dimension of outputs)
     def test_forward(self):
