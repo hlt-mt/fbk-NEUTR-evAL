@@ -12,7 +12,7 @@ To clone and install our repository, execute the following commands:
 
 ```bash
 git clone https://github.com/hlt-mt/fbk-NEUTR-evAL.git
-cd GeNTE
+cd fbk-NEUTR-evAL
 pip install -e .
 pip install -r requirements.txt
 ```
