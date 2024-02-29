@@ -7,6 +7,10 @@ with our reference-free solution. It is a classifier finetuned on
 _[UmBERTo](https://huggingface.co/Musixmatch/umberto-commoncrawl-cased-v1),_
 a Roberta-based Language Model trained on large Italian Corpora.
 
+All data are released under a Creative Commons Attribution 4.0 International license (CC BY 4.0).
+For data generated with proprietary models, please refer to their terms for use for details ([OpenAI](https://openai.com/policies/terms-of-use), 
+[Amazon Translate](https://aws.amazon.com/it/service-terms/),
+[DeepL](https://www.deepl.com/en/pro-license)).
 
 ## How to run
 
