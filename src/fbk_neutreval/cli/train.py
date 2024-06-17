@@ -16,9 +16,9 @@ import argparse
 import os
 from pathlib import Path
 
-from src.data_preprocessing import Preprocessor
-from src.model import SequenceClassificationModel
-from src.trainer import BertTrainer
+from fbk_neutreval.data_preprocessing import Preprocessor
+from fbk_neutreval.model import SequenceClassificationModel
+from fbk_neutreval.trainer import BertTrainer
 
 
 def main():

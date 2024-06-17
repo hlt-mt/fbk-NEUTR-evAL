@@ -14,7 +14,6 @@ To clone and install our repository, execute the following commands:
 git clone https://github.com/hlt-mt/fbk-NEUTR-evAL.git
 cd fbk-NEUTR-evAL
 pip install -e .
-pip install -r requirements.txt
 ```
 
 ## Available Solutions

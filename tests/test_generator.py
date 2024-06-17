@@ -19,7 +19,7 @@ import torch
 from torch import LongTensor
 from torch.utils.data import TensorDataset, DataLoader
 
-from src.generator import Generator
+from fbk_neutreval.generator import Generator
 
 
 class TestBertGenerator(unittest.TestCase):

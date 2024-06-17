@@ -15,7 +15,7 @@
 import unittest
 import string
 
-from src.cli.neogate_evaluation import get_annotations, to_words, Annotation, \
+from fbk_neutreval.cli.neogate_evaluation import get_annotations, to_words, Annotation, \
     evaluate_word, evaluate_line, check_misgenerations, compute_scores
 
 

@@ -17,7 +17,7 @@ import numpy as np
 import torch
 from torch import LongTensor
 
-from src.model import SequenceClassificationModel
+from fbk_neutreval.model import SequenceClassificationModel
 
 
 class TestBertPreprocessor(unittest.TestCase):

@@ -18,10 +18,10 @@ from typing import List
 
 from torch.utils.data import DataLoader
 
-from src.data_preprocessing import Preprocessor
-from src.generator import Generator
-from src.metrics import REGISTERED_METRICS, Metric
-from src.writers import REGISTERED_WRITERS, FileWriter
+from fbk_neutreval.data_preprocessing import Preprocessor
+from fbk_neutreval.generator import Generator
+from fbk_neutreval.metrics import REGISTERED_METRICS, Metric
+from fbk_neutreval.writers import REGISTERED_WRITERS, FileWriter
 
 
 def generate(

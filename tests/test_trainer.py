@@ -20,8 +20,8 @@ import torch
 from torch import LongTensor
 from torch.utils.data import TensorDataset, DataLoader
 
-from src.model import SequenceClassificationModel
-from src.trainer import BertTrainer
+from fbk_neutreval.model import SequenceClassificationModel
+from fbk_neutreval.trainer import BertTrainer
 
 
 class TestBertTrainer(unittest.TestCase):

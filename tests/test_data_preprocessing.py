@@ -16,7 +16,7 @@ import unittest
 import torch
 from torch import Tensor
 
-from src.data_preprocessing import Preprocessor
+from fbk_neutreval.data_preprocessing import Preprocessor
 
 
 class TestBertPreprocessor(unittest.TestCase):

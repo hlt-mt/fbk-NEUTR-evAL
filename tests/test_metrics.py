@@ -14,7 +14,7 @@
 import unittest
 
 from sklearn.metrics import classification_report
-from src.metrics import ClassBasedF1Metric, AccuracyMetric
+from fbk_neutreval.metrics import ClassBasedF1Metric, AccuracyMetric
 
 
 class TestMetrics(unittest.TestCase):

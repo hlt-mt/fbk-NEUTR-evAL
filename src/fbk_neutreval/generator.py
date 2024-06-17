@@ -15,7 +15,7 @@ from pathlib import Path
 
 import torch
 
-from src.model import SequenceClassificationModel
+from fbk_neutreval.model import SequenceClassificationModel
 
 
 class Generator:

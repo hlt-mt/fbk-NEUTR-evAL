@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fbk-NEUTR-evAL"
+version = "1.0"
+authors = [
+  { name="Marco Gaido", email="mgaido@fbk.eu" },
+  { name="Dennis Fucci", email="dfucci@fbk.eu" },
+  { name="Andrea Piergentili", email="apiergentili@fbk.eu" },
+]
+
+description = "FBK MT Unit solutions for the evALuation of gender NEUTRality in monolingual and cross-lingual contexts."
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: Apache-2.0",
+    "Operating System :: OS Independent",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Text Processing :: Linguistic"
+]
+
+dependencies = ["torch", "transformers", "scikit-learn"]
+
+[project.urls]
+"Homepage" = "https://github.com/hlt-mt/fbk-NEUTR-evAL/"
+"Bug Tracker" = "https://github.com/hlt-mt/fbk-NEUTR-evAL/issues"
+
+[project.optional-dependencies]
+dev = ["flake8"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[project.scripts]
+neogate_eval = "cli.neogate_evaluation:cli_script"
