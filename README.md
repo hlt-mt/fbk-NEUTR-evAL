@@ -22,7 +22,7 @@ You can find a dedicated README for each available evaluation solution in the `s
 along with Bibtex citations referencing the respective papers.
 
 1. [Neutral Classifier for GeNTE](solutions/GeNTE.md) (Piergentili et al. 2023)
-
+2. [Evaluation Script for Neo-GATE](solutions/Neo-GATE.md) (Piergentili et al. 2024)
 
 
 ## License
