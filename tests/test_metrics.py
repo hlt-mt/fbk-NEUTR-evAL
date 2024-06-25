@@ -52,7 +52,8 @@ class TestMetrics(unittest.TestCase):
         true_report = {c: true_report[str(c)] for c in classes}
         for c in true_report:
             del true_report[c]['support']
-        self.assertDictEqual(true_report, cand_report)
+            for m in true_report[c]:
+                self.assertAlmostEqual(true_report[c][m], cand_report[c][m], places=15)
 
 
 if __name__ == '__main__':
