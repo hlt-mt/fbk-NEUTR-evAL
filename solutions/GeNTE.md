@@ -17,7 +17,7 @@ For data generated with proprietary models, please refer to their terms for use 
 Our _**classifier v1**_ (`$CLASSIFIER_FOLDER`) can be downloaded at the following
 [link](https://fbk.sharepoint.com/:u:/s/MTUnit/EUMZhW8AympKmpTBjqARIa4BkuwbOt-P7-Pxn_koAHvDqA?e=Dm0RpS).
 It contains the checkpoint and the config file (for reference, cite `piergentili-etal-2023-hi`).
-A new version of the classifier (_**classifier v2**_), used for the automatic evaluation in `savoldi2024prompt`,
+A new version of the classifier (_**classifier v2**_), used for the automatic evaluation in `savoldi-etal-2024-prompt`,
 can be downloaded at the following 
 [link](https://fbk.sharepoint.com/:u:/s/MTUnit/Ee8XbBxkLK5Bl2jdILJDIkMBWaMnjI4NKLVALm4UauhXYw?e=ELdhyO).
 The difference between the two versions lies in the training data used (see Training data section).\
@@ -92,8 +92,7 @@ output sentences, one from each translator: Amazon-N-PEbyTransl1, Amazon-N-PEbyT
 Therefore you can download the following translations at this 
 [link](https://fbk.sharepoint.com/:u:/s/MTUnit/EbjRY8Tu9G1HsXWute-t33EBeK4XyGqqCHnRCodphO7DDQ?e=reEzbp):
 - Amazon: `Amazon-G-original` for COMMON-SET-G; `Amazon-N-PEbyTransl1`, `Amazon-N-PEbyTransl2`, `Amazon-N-PEbyTransl3`, for COMMON-SET-N
-- DeepL: `DeepL-G-original` for COMMON-SET-G; `DeepL-N-PEbyTransl1`, `DeepL-N-PEbyTransl2`, `DeepL-N-PEbyTransl3`, for COMMON-SET-*N
-
+- DeepL: `DeepL-G-original` for COMMON-SET-G; `DeepL-N-PEbyTransl1`, `DeepL-N-PEbyTransl2`, `DeepL-N-PEbyTransl3`, for COMMON-SET-N
 
 ## How to cite
 
@@ -114,22 +113,29 @@ published at EMNLP 2023.
     year = "2023",
     address = "Singapore",
     publisher = "Association for Computational Linguistics",
-    url = "",
-    doi = "",
-    pages = "",
+    url = "https://aclanthology.org/2023.emnlp-main.873",
+    doi = "10.18653/v1/2023.emnlp-main.873",
+    pages = "14124--14140",
 }
 ```
 The reference paper for the _classifier v2_ is:
-[A Prompt Response to the Demand for Automatic Gender-Neutral Translation](https://arxiv.org/abs/2402.06041),
-accepted at EACL 2024.
+[A Prompt Response to the Demand for Automatic Gender-Neutral Translation](https://aclanthology.org/2024.eacl-short.23/),
+published at EACL 2024.
 
 ```
-@misc{savoldi2024prompt,
-      title={A Prompt Response to the Demand for Automatic Gender-Neutral Translation}, 
-      author={Beatrice Savoldi and Andrea Piergentili and Dennis Fucci and Matteo Negri and Luisa Bentivogli},
-      year={2024},
-      eprint={2402.06041},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
+@inproceedings{savoldi-etal-2024-prompt,
+    title = "A Prompt Response to the Demand for Automatic Gender-Neutral Translation",
+    author = "Savoldi, Beatrice  and
+      Piergentili, Andrea  and
+      Fucci, Dennis  and
+      Negri, Matteo  and
+      Bentivogli, Luisa",
+    booktitle = "Proceedings of the 18th Conference of the European Chapter of the Association for Computational Linguistics (Volume 2: Short Papers)",
+    month = mar,
+    year = "2024",
+    address = "St. Julian{'}s, Malta",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2024.eacl-short.23",
+    pages = "256--267",
 }
 ```
