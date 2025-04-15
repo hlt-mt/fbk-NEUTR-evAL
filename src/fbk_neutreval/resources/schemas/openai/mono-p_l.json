@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "phrases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["phrase", "gender"],
+        "additionalProperties": false,
+        "properties": {
+          "phrase": {
+            "type": "string",
+            "description": "Phrase from the target sentence being annotated"
+          },
+          "gender": {
+            "type": "string",
+            "enum": ["M", "F", "N"],
+            "description": "Gender expressed by the phrase"
+          }
+        }
+      }
+    },
+    "label": {
+      "type": "string",
+      "enum": ["NEUTRAL", "GENDERED"],
+      "description": "Indicates whether the sentence is gender-neutral or gendered."
+    }
+  },
+  "required": ["phrases", "label"],
+  "additionalProperties": false
+}

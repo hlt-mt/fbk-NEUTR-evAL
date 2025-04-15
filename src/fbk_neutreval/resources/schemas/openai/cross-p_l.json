@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "phrases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["phrase", "gender", "gender_correctness"],
+        "additionalProperties": false,
+        "properties": {
+          "phrase": {
+            "type": "string",
+            "description": "Phrase from the target sentence being annotated"
+          },
+          "gender": {
+            "type": "string",
+            "enum": ["M", "F", "N"],
+            "description": "Gender expressed by the phrase"
+          },
+          "gender_correctness": {
+            "type": "string",
+            "enum": ["correct", "wrong"],
+            "description": "Phrase gender correctness assessment based on information available in the source"
+          }
+        }
+      }
+    },
+    "label": {
+      "type": "string",
+      "enum": ["CORRECTLY GENDERED", "WRONGLY GENDERED", "NEUTRAL"],
+      "description": "Indicates whether the translation correctly represents the gender expressed in the source, and whether it is neutral or gendered."
+    }
+  },
+  "required": ["phrases", "label"],
+  "additionalProperties": false
+}

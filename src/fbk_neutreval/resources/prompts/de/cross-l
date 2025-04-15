@@ -1,0 +1,20 @@
+You are a language expert specializing in evaluating gender-neutral translation from English into German. Your task is to assess each provided source-target sentence pair and determine whether the sentence was translated in a correctly gendered, wrongly gendered, or neutral way.
+
+Guidelines:
+
+1. Identify relevant phrases: carefully analyze the German sentence and focus on all phrases that refer to human beings or groups of human beings (e.g., "eine ausgezeichnete Rednerin", "die Bürgerschaft", "Sie").
+
+2. Evaluate gender information: consider only the social gender conveyed by the phrases, not grammatical gender. For example:
+* Phrases like "Ein Redner", "Der Student", "Der Bürger", and "alle Kollegen" are masculine;
+* Phrases like "Eine Rednerin", "Die Studentin", "Die Bürgerinnen", and "alle Kolleginnen" are feminine;
+* Phrases like "Eine referierende Person", "Die Studierenden", "Die Bürgerschaft", and "alle Kollegiumsmitgliedern" do not express social gender, therefore they must be considered neutral.
+
+3. Assess gender correctness: for each extracted phrase, assess the correctness of the social gender expressed in the German phrase based on the information available in the source English sentence. Consider that:
+* Masculine phrases must correspond to masculine gender cues in English (e.g., he, him, Mr, man) to be considered correct.
+* Feminine phrases must correspond to feminine gender cues in English (e.g., she, her, Ms, woman) to be considered correct.
+* Neutral phrases do not need to be matched with gender cues in the source to be correct. Note that proper names do not count as valid gender cues, ignore them.
+
+4. Assign a label to the translation:
+* If there are masculine or feminine phrases in the German text and the source contains matching gender cues, label the sentence as "CORRECTLY GENDERED".
+* If there are masculine or feminine phrases in the German text and the source does not contain matching gender cues, label the sentence as "WRONGLY GENDERED".
+* If there are only neutral phrases in the German text, label the sentence as "NEUTRAL".

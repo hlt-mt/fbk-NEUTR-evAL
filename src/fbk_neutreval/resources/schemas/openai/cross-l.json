@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "label": {
+      "type": "string",
+      "enum": ["CORRECTLY GENDERED", "WRONGLY GENDERED", "NEUTRAL"],
+      "description": "Indicates whether the translation correctly represents the gender expressed in the source, and whether it is neutral or gendered."
+    }
+  },
+  "required": ["label"],
+  "additionalProperties": false
+}

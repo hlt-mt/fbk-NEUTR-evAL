@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "label": {
+      "type": "string",
+      "enum": ["NEUTRAL", "GENDERED"],
+      "description": "Indicates whether the sentence is gender-neutral or gendered."
+    }
+  },
+  "required": ["label"],
+  "additionalProperties": false
+}

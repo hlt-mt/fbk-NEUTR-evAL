@@ -23,7 +23,7 @@ classifiers = [
     "Topic :: Text Processing :: Linguistic"
 ]
 
-dependencies = ["torch", "transformers", "scikit-learn"]
+dependencies = ["torch", "transformers", "scikit-learn", "outlines", "openai"]
 
 [project.urls]
 "Homepage" = "https://github.com/hlt-mt/fbk-NEUTR-evAL/"
@@ -32,8 +32,16 @@ dependencies = ["torch", "transformers", "scikit-learn"]
 [project.optional-dependencies]
 dev = ["flake8"]
 
+[tool.setuptools]
+include-package-data = true
+
 [tool.setuptools.packages.find]
 where = ["src"]
 
+[tool.setuptools.package-data]
+"fbk_neutreval" = ["resources/**/*"]
+
 [project.scripts]
 neogate_eval = "cli.neogate_evaluation:cli_script"
+llm_eval = "fbk_neutreval.cli.llm_as_a_judge.huggingface:cli"
+gpt_eval = "fbk_neutreval.cli.llm_as_a_judge.gpt:cli"
