@@ -23,6 +23,7 @@ along with Bibtex citations referencing the respective papers:
  - [Neutral Classifier for GeNTE v1](solutions/GeNTE.md) from [EMNLP 2023] **_Hi Guys_ or _Hi Folks_? Benchmarking Gender-Neutral Machine Translation with the GeNTE Corpus**
  - [Neutral Classifier for GeNTE v2](solutions/GeNTE.md) from [EACL 2024] **A Prompt Response to the Demand for Automatic Gender-Neutral Translation**
  - [Evaluation Script for Neo-GATE](solutions/Neo-GATE.md) from [EAMT 2024] **Enhancing Gender-Inclusive Machine Translation with Neomorphemes and Large Language Models**
+ - [Scripts and Data for LLM-based neutrality evaluation](solutions/LLM-as-a-Judge.md) from [GITT 2025] **An LLM-as-a-judge Approach for Scalable Gender-Neutral Translation Evaluation**
 
 
 
