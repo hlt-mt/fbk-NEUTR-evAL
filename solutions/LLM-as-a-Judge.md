@@ -1,6 +1,6 @@
 # Multilingual Gender-Neutral Text and Translation Evaluation
 
-This repository contains the code to perform LLM-based gender-neutrality in German, Italian, and Spanish texts and gender-neutral translation evaluation from English into those languages. \
+This repository contains the code to perform LLM-based gender-neutrality evaluation in German, Italian, and Spanish texts and gender-neutral translation evaluation from English into those languages and Greek. \
 This approach can be used in conjunction with [mGeNTE](https://huggingface.co/datasets/FBK-MT/mGeNTE) to benchmark gender-neutral reformulation and translation in multiple languages.
 
 ## Evaluation formats
@@ -24,7 +24,7 @@ Then, you can run the evaluation either using local models compatible with the `
 
 ### Preparation
 
-If you want to evaluate **gender-neutral translation from English into German, Italian, or Spanish**, organize the data in a TSV file containing the following columns:
+If you want to evaluate **gender-neutral translation from English into German, Greek, Italian, or Spanish**, organize the data in a TSV file containing the following columns:
 * `src`: this column must contain the English source sentences
 * `tgt`: this column must contain the target language translations
 
@@ -41,11 +41,11 @@ llm_eval -i $INPUT \
 
 **Parameters:**
 - `$INPUT` is the path to the input TSV file.
-- `$LANGUAGE_CODE` identifies the specific langauge to be evaluated, either `de`, `es`, or `it` for German, Spanish, or Italian respectively.
+- `$LANGUAGE_CODE` identifies the specific langauge to be evaluated, either `de`, `el`, `es`, or `it` for German, Greek, Spanish, or Italian respectively.
 - `$OUTPUT_PATH` is the path and name for the output *JSON Lines* file.
 
 **Optional parameters:**
-- `-p` or `--prompt`: Indicate which evaluation format to use among `mono-l`, `mono-p_l`, `cross-l`, and `cross-p_l`. Defaults to `cross-p_l`.
+- `-p` or `--prompt`: Indicate which evaluation format to use among `mono-l`, `mono-p_l`, `cross-l`, and `cross-p_l`. Defaults to `cross-p_l`. For Greek, only `cross-p_l` is available.
 - `-m` or `--model`: Hugging Face model identifier to use a specific model. Defaults to `Qwen/Qwen2.5-72B-Instruct`.
 - `-r` or `--start_index`: Indicate the starting index for the evaluation. Defaults to 0.
 - `-v` or `--verbose`: Specify to show all model's outputs to the standard output.
@@ -67,12 +67,12 @@ gpt_eval -i $INPUT \
 
 **Parameters:**
 - `$INPUT` is the path to the input TSV file.
-- `$LANGUAGE_CODE` identifies the specific langauge to be evaluated, either `de`, `es`, or `it` for German, Spanish, or Italian respectively.
+- `$LANGUAGE_CODE` identifies the specific langauge to be evaluated, either `de`, `el`, `es`, or `it` for German, Greek, Spanish, or Italian respectively.
 - `$OUTPUT_PATH` is the path and name for the output *JSON Lines* file.
 - `$OPENAI_API_KEY_FILE` is the path to a plain text file containing an OpenAI API key.
 
 **Optional parameters:**
-- `-p` or `--prompt`: Indicate which evaluation format to use among `mono-l`, `mono-p_l`, `cross-l`, and `cross-p_l`. Defaults to `cross-p_l`.
+- `-p` or `--prompt`: Indicate which evaluation format to use among `mono-l`, `mono-p_l`, `cross-l`, and `cross-p_l`. Defaults to `cross-p_l`. For Greek, only `cross-p_l` is available.
 - `-m` or `--model`: OpenAI model identifier to use a specific endpoint. Make sure that your endpoint supports structured generation. Defaults to `gpt-4o-2024-08-06`.
 - `--org_file`: Path to a plain text file containing an OpenAI organization ID.
 - `-r` or `--start_index`: Indicate the starting index for the evaluation. Defaults to 0.

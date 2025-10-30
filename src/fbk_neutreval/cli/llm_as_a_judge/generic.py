@@ -61,8 +61,8 @@ def add_args(parser: argparse.ArgumentParser) -> argparse.ArgumentParser:
     parser.add_argument('-i', '--input', type=str, required=True,
                         help="TSV file containing input data.")
     parser.add_argument('-l', "--lang", type=str, required=True,
-                        choices=['de', 'es', 'it'],
-                        help="Target language to be evaluated (either 'de', 'es', or 'it')")
+                        choices=['de', 'el', 'es', 'it'],
+                        help="Target language to be evaluated (either 'de', 'es', 'el', or 'it')")
     parser.add_argument("-o", "--output", type=str, help="Output file", required=True)
     parser.add_argument("-p", "--prompt", default='cross-p_l', type=str,
                         choices=['mono-l', 'mono-p_l', 'cross-l', 'cross-p_l'],

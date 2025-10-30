@@ -65,13 +65,14 @@ def cli():
     the TSV file should contain two columns with headers 'src' and 'tgt', for the source sentences
     and the candidate translations respectively. For target-only evaluation, only the 'tgt' column
     is necessary.
-    * -l or --lang: the language to be evaluated (either 'de', 'es', or 'it').
+    * -l or --lang: the language to be evaluated (either 'de', 'el', 'es', or 'it').
     * -o or --output: the path and name of the output file. Models' generation will be saved in
     JSON Lines format.
 
     Optional arguments:
     * -p or --prompt: the specific prompt to be used for the evaluation (either 'mono-l',
-    'mono-p_l', 'cross-l', 'cross-p_l'). Default: 'cross-p_l'.
+    'mono-p_l', 'cross-l', 'cross-p_l'). Default: 'cross-p_l'. For Greek, only `cross-p_l` is
+    available.
     * -s or --include_source: Specify to include the source in the evaluation. If specified, the
     input data should be a TSV file with separate columns for the source and the target, with
     headers 'src' and 'tgt' respectively. Otherwise, the file should only include the column 'tgt'.
@@ -86,7 +87,12 @@ def cli():
     parser.add_argument("-m", "--model",
                         help="Model identifier, defaults to Qwen/Qwen2.5-72B-Instruct",
                         default='Qwen/Qwen2.5-72B-Instruct')
+
+    # Catch invalid options for Greek evaluation
     args = parser.parse_args()
+    if args.lang == 'el' and args.prompt != 'cross-p_l':
+        parser.error("When '--lang el' is selected, '--prompt' must be 'cross-p_l' (default).")
+
     main(args)
 
 
