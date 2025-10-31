@@ -23,7 +23,7 @@ classifiers = [
     "Topic :: Text Processing :: Linguistic"
 ]
 
-dependencies = ["torch", "transformers", "scikit-learn", "outlines", "openai"]
+dependencies = ["torch", "transformers<=4.46.3", "scikit-learn", "outlines", "openai", "numpy<2"]
 
 [project.urls]
 "Homepage" = "https://github.com/hlt-mt/fbk-NEUTR-evAL/"
